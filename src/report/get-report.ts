@@ -49,7 +49,7 @@ export function getReport(results: TestRunResult[], options: ReportOptions = def
     return trimReport(lines)
   } catch (error) {
     if (error instanceof Error) {
-      core.info("Exception Details:");
+      core.info("Exception Details:", error);
       core.info("Message:", error.message);
       core.info("Stack Trace:", error.stack);
       throw error;

@@ -1547,7 +1547,7 @@ function getReport(results, options = defaultOptions) {
       core.warning(`Test report summary exceeded limit of ${MAX_REPORT_LENGTH} bytes and will be trimmed`);
       return trimReport(lines);
     } catch (error) {
-      core.info("Exception Details:");
+      core.info("Exception Details:,", error);
       core.info("Message:", error.message);
       core.info("Stack Trace:", error.stack);
       throw error;
