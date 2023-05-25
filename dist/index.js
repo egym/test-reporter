@@ -513,7 +513,7 @@ class DartJsonParser {
         });
     }
     getTestRun(path, content) {
-        const lines = content.split(/\n\r?/g);
+        const lines = content ? content.split(/\n\r?/g): [];
         const events = lines
             .map((str, i) => {
             if (str.trim() === '') {
@@ -632,7 +632,7 @@ class DartJsonParser {
         return message || print;
     }
     exceptionThrowSource(ex, trackedFiles) {
-        const lines = ex.split(/\r?\n/g);
+        const lines = ex ? ex.split(/\r?\n/g):[];
         // regexp to extract file path and line number from stack trace
         const dartRe = /^(?!package:)(.*)\s+(\d+):\d+\s+/;
         const flutterRe = /^#\d+\s+.*\((?!package:)(.*):(\d+):\d+\)$/;
@@ -1705,6 +1705,7 @@ function getTestsReport(ts, runIndex, suiteIndex, options) {
     const tsSlug = makeSuiteSlug(runIndex, suiteIndex);
     const tsNameLink = `<a id="${tsSlug.id}" href="${options.baseUrl + tsSlug.link}">${tsName}</a>`;
     const icon = getResultIcon(ts.result);
+    core.info('in getResultIcon 1707');
     sections.push(`### ${icon}\xa0${tsNameLink}`);
     sections.push('```');
     for (const grp of groups) {
