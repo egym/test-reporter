@@ -1593,6 +1593,7 @@ function getByteLength(text) {
     return Buffer.byteLength(text, 'utf8');
 }
 function renderReport(results, options) {
+  core.info('in renderReport');
     const sections = [];
     const badge = getReportBadge(results);
     sections.push(badge);
@@ -1601,12 +1602,14 @@ function renderReport(results, options) {
     return sections;
 }
 function getReportBadge(results) {
+  core.info('in getReportBadge');
     const passed = results.reduce((sum, tr) => sum + tr.passed, 0);
     const skipped = results.reduce((sum, tr) => sum + tr.skipped, 0);
     const failed = results.reduce((sum, tr) => sum + tr.failed, 0);
     return getBadge(passed, failed, skipped);
 }
 function getBadge(passed, failed, skipped) {
+  core.info('in getBadge');
     const text = [];
     if (passed > 0) {
         text.push(`${passed} passed`);
@@ -1630,6 +1633,7 @@ function getBadge(passed, failed, skipped) {
     return `![${hint}](https://img.shields.io/badge/${uri})`;
 }
 function getTestRunsReport(testRuns, options) {
+  core.info('in getTestRunsReport');
     const sections = [];
     if (testRuns.length > 1 || options.onlySummary) {
         const tableData = testRuns.map((tr, runIndex) => {
@@ -1652,6 +1656,7 @@ function getTestRunsReport(testRuns, options) {
     return sections;
 }
 function getSuitesReport(tr, runIndex, options) {
+  core.info('in getSuitesReport');
     const sections = [];
     const trSlug = makeRunSlug(runIndex);
     const nameLink = `<a id="${trSlug.id}" href="${options.baseUrl + trSlug.link}">${tr.path}</a>`;
@@ -1686,6 +1691,7 @@ function getSuitesReport(tr, runIndex, options) {
     return sections;
 }
 function getTestsReport(ts, runIndex, suiteIndex, options) {
+  core.info('in getTestsReport');
     var _a, _b, _c;
     if (options.listTests === 'failed' && ts.result !== 'failed') {
         return [];
@@ -1721,14 +1727,17 @@ function getTestsReport(ts, runIndex, suiteIndex, options) {
     return sections;
 }
 function makeRunSlug(runIndex) {
+  core.info('in makeRunSlug');
     // use prefix to avoid slug conflicts after escaping the paths
     return (0, slugger_1.slug)(`r${runIndex}`);
 }
 function makeSuiteSlug(runIndex, suiteIndex) {
+  core.info('in makeSuiteSlug');
     // use prefix to avoid slug conflicts after escaping the paths
     return (0, slugger_1.slug)(`r${runIndex}s${suiteIndex}`);
 }
 function getResultIcon(result) {
+  core.info('in getResultIcon');
     switch (result) {
         case 'success':
             return markdown_utils_1.Icon.success;
