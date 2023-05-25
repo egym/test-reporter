@@ -1529,8 +1529,10 @@ function getReport(results, options = defaultOptions) {
     try {
       core.info('Generating check run summary');
       applySort(results);
+      core.info('After applySort');
       const opts = Object.assign({}, options);
       let lines = renderReport(results, opts);
+      core.info('After renderReport');
       let report = lines.join('\n');
       if (getByteLength(report) <= MAX_REPORT_LENGTH) {
           return report;
@@ -1555,6 +1557,7 @@ function getReport(results, options = defaultOptions) {
 }
 exports.getReport = getReport;
 function trimReport(lines) {
+  core.info('in trimReport');
     const closingBlock = '```';
     const errorMsg = `**Report exceeded GitHub limit of ${MAX_REPORT_LENGTH} bytes and has been trimmed**`;
     const maxErrorMsgLength = closingBlock.length + errorMsg.length + 2;
