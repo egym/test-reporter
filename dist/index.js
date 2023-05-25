@@ -1716,7 +1716,7 @@ function getTestsReport(ts, runIndex, suiteIndex, options) {
             const result = getResultIcon(tc.result);
             sections.push(`${space}${result} ${tc.name}`);
             if (tc.error) {
-                const lines = (_c = ((_a = tc.error.message) !== null && _a !== void 0 ? _a : (_b = (0, parse_utils_1.getFirstNonEmptyLine)(tc.error.details)) === null || _b === void 0 ? void 0 : _b.trim())) === null || _c === void 0 ? void 0 : _c.split(/\r?\n/g).map(l => '\t' + l);
+                const lines = (_c = ((_a = tc.error.message) !== null && _a !== void 0 ? _a : (_b = (0, parse_utils_1.getFirstNonEmptyLine)(tc.error.details)) === null || _b === void 0 ? void 0 : _b.trim())) === null || _c === void 0 ? void 0 : _c?.split(/\r?\n/g).map(l => '\t' + l);
                 if (lines) {
                     sections.push(...lines);
                 }
@@ -1737,7 +1737,6 @@ function makeSuiteSlug(runIndex, suiteIndex) {
     return (0, slugger_1.slug)(`r${runIndex}s${suiteIndex}`);
 }
 function getResultIcon(result) {
-  core.info('in getResultIcon');
     switch (result) {
         case 'success':
             return markdown_utils_1.Icon.success;
