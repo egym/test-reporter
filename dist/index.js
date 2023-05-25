@@ -1045,7 +1045,7 @@ class JavaJunitParser {
         const details = typeof failure === 'object' ? failure._ : failure;
         let filePath;
         let line;
-        if (details != null) {
+        if (details != null || details != undefined) {
             const src = this.exceptionThrowSource(details);
             if (src) {
                 filePath = src.filePath;
@@ -1525,25 +1525,33 @@ const defaultOptions = {
     onlySummary: false
 };
 function getReport(results, options = defaultOptions) {
-    core.info('Generating check run summary');
-    applySort(results);
-    const opts = Object.assign({}, options);
-    let lines = renderReport(results, opts);
-    let report = lines.join('\n');
-    if (getByteLength(report) <= MAX_REPORT_LENGTH) {
-        return report;
+
+    try {
+      core.info('Generating check run summary');
+      applySort(results);
+      const opts = Object.assign({}, options);
+      let lines = renderReport(results, opts);
+      let report = lines.join('\n');
+      if (getByteLength(report) <= MAX_REPORT_LENGTH) {
+          return report;
+      }
+      if (opts.listTests === 'all') {
+          core.info("Test report summary is too big - setting 'listTests' to 'failed'");
+          opts.listTests = 'failed';
+          lines = renderReport(results, opts);
+          report = lines.join('\n');
+          if (getByteLength(report) <= MAX_REPORT_LENGTH) {
+              return report;
+          }
+      }
+      core.warning(`Test report summary exceeded limit of ${MAX_REPORT_LENGTH} bytes and will be trimmed`);
+      return trimReport(lines);
+    } catch (error) {
+      core.info("Exception Details:");
+      core.info("Message:", error.message);
+      core.info("Stack Trace:", error.stack);
+      throw error;
     }
-    if (opts.listTests === 'all') {
-        core.info("Test report summary is too big - setting 'listTests' to 'failed'");
-        opts.listTests = 'failed';
-        lines = renderReport(results, opts);
-        report = lines.join('\n');
-        if (getByteLength(report) <= MAX_REPORT_LENGTH) {
-            return report;
-        }
-    }
-    core.warning(`Test report summary exceeded limit of ${MAX_REPORT_LENGTH} bytes and will be trimmed`);
-    return trimReport(lines);
 }
 exports.getReport = getReport;
 function trimReport(lines) {

@@ -22,30 +22,37 @@ const defaultOptions: ReportOptions = {
 }
 
 export function getReport(results: TestRunResult[], options: ReportOptions = defaultOptions): string {
-  core.info('Generating check run summary')
+  try {
+    core.info('Generating check run summary')
 
-  applySort(results)
+    applySort(results)
 
-  const opts = {...options}
-  let lines = renderReport(results, opts)
-  let report = lines.join('\n')
+    const opts = { ...options }
+    let lines = renderReport(results, opts)
+    let report = lines.join('\n')
 
-  if (getByteLength(report) <= MAX_REPORT_LENGTH) {
-    return report
-  }
-
-  if (opts.listTests === 'all') {
-    core.info("Test report summary is too big - setting 'listTests' to 'failed'")
-    opts.listTests = 'failed'
-    lines = renderReport(results, opts)
-    report = lines.join('\n')
     if (getByteLength(report) <= MAX_REPORT_LENGTH) {
       return report
     }
-  }
 
-  core.warning(`Test report summary exceeded limit of ${MAX_REPORT_LENGTH} bytes and will be trimmed`)
-  return trimReport(lines)
+    if (opts.listTests === 'all') {
+      core.info("Test report summary is too big - setting 'listTests' to 'failed'")
+      opts.listTests = 'failed'
+      lines = renderReport(results, opts)
+      report = lines.join('\n')
+      if (getByteLength(report) <= MAX_REPORT_LENGTH) {
+        return report
+      }
+    }
+
+    core.warning(`Test report summary exceeded limit of ${MAX_REPORT_LENGTH} bytes and will be trimmed`)
+    return trimReport(lines)
+  } catch (error) {
+    core.info("Exception Details:");
+    core.info("Message:", error.message);
+    core.info("Stack Trace:", error.stack);
+    throw error;
+  }
 }
 
 function trimReport(lines: string[]): string {
