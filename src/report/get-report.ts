@@ -48,10 +48,12 @@ export function getReport(results: TestRunResult[], options: ReportOptions = def
     core.warning(`Test report summary exceeded limit of ${MAX_REPORT_LENGTH} bytes and will be trimmed`)
     return trimReport(lines)
   } catch (error) {
-    core.info("Exception Details:");
-    core.info("Message:", error.message);
-    core.info("Stack Trace:", error.stack);
-    throw error;
+    if (error instanceof Error) {
+      core.info("Exception Details:");
+      core.info("Message:", error.message);
+      core.info("Stack Trace:", error.stack);
+      throw error;
+    }
   }
 }
 
