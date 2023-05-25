@@ -863,7 +863,7 @@ class DotnetTrxParser {
         };
     }
     exceptionThrowSource(stackTrace) {
-        const lines = stackTrace.split(/\r*\n/);
+        const lines = stackTrace != null && stackTrace != undefined ? stackTrace.split(/\r*\n/) : [];
         const re = / in (.+):line (\d+)$/;
         const { trackedFiles } = this.options;
         for (const str of lines) {
@@ -1060,7 +1060,7 @@ class JavaJunitParser {
         };
     }
     exceptionThrowSource(stackTrace) {
-        const lines = stackTrace.split(/\r?\n/);
+      const lines = stackTrace != null && stackTrace != undefined ? stackTrace.split(/\r*\n/) : [];
         for (const str of lines) {
             const stackTraceElement = (0, java_stack_trace_element_parser_1.parseStackTraceElement)(str);
             if (stackTraceElement) {
