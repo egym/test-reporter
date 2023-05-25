@@ -129,7 +129,7 @@ export class JavaJunitParser implements TestParser {
     let filePath
     let line
 
-    if (details != null) {
+    if (details != null || details != undefined) {
       const src = this.exceptionThrowSource(details)
       if (src) {
         filePath = src.filePath
